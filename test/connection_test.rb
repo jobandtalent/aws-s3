@@ -111,17 +111,16 @@ class ConnectionTest < Test::Unit::TestCase
     assert connection.http.proxy?
   end
   
-  def test_request_only_escapes_the_path_the_first_time_it_runs_and_not_subsequent_times
+  def test_request_escapes_the_path_everytime_it_runs
     connection     = Connection.new(@keys)
     unescaped_path = 'path with spaces'
     escaped_path   = 'path%20with%20spaces'
     
-    flexmock(Connection).should_receive(:prepare_path).with(unescaped_path).once.and_return(escaped_path).ordered
-    flexmock(connection.http).should_receive(:request).and_raise(Errno::EPIPE).ordered
-    flexmock(connection.http).should_receive(:request).ordered
+    flexmock(connection.http).should_receive(:request).with(on {|r| r.path == escaped_path }).and_raise(Errno::EPIPE).ordered
+    flexmock(connection.http).should_receive(:request).with(on {|r| r.path == escaped_path }).ordered
     connection.request :put, unescaped_path
   end
-  
+
   def test_if_request_has_no_body_then_the_content_length_is_set_to_zero
     # References bug: http://rubyforge.org/tracker/index.php?func=detail&aid=13052&group_id=2409&atid=9356
     connection = Connection.new(@keys)
