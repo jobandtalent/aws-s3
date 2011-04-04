@@ -1,4 +1,3 @@
-require 'rake'
 require File.expand_path("../lib/aws/s3/version", __FILE__)
 
 Gem::Specification.new do |s|
@@ -12,7 +11,7 @@ Gem::Specification.new do |s|
   s.extra_rdoc_files = %w(README COPYING INSTALL)
   s.homepage = 'http://amazon.rubyforge.org'
   s.rubyforge_project = 'amazon'
-  s.files = FileList['Rakefile', 'lib/**/*.rb', 'bin/*', 'support/**/*.rb']
+  s.files = Dir.glob("{lib,bin,support}/**/*") + ['Rakefile']
   s.executables << 's3sh'
   s.test_files = Dir['test/**/*']
   
