@@ -1,3 +1,4 @@
+require 'rake'
 require File.expand_path("../lib/aws/s3/version", __FILE__)
 
 Gem::Specification.new do |s|
